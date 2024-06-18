@@ -7,7 +7,7 @@ This is a resume builder that can help user facilitate their recruiting process.
 The project also includes an AI resume improver, which elaborates the wording and removes grammatical errors, and an AI resume rater, which rates the resume (currently only texts without format) and provides feedback on how to improve it. Both use GPT-3.5 as the model.
 
 
-# Getting Start
+# Getting Started
 
 To start using the resume builder, simply clone the repository to your local repository. Then, make sure that you have Python installed. If not, go to https://www.python.org/downloads/ to get the interpreter and follow the installation instructions. After this, go to your local repository and run the following command in your terminal to install all the required packages:
 
