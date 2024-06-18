@@ -9,7 +9,11 @@ The project also includes an AI resume improver, which elaborates the wording an
 
 # Getting Started
 
-To start using the resume builder, simply clone the repository to your local repository. Then, make sure that you have Python installed. If not, go to https://www.python.org/downloads/ to get the interpreter and follow the installation instructions. After this, go to your local repository and run the following command in your terminal to install all the required packages:
+To start using the resume builder, simply clone the repository to your local repository by using the following command in your terminal:
+
+`git clone git@github.com:MikeChen012345/resume_builder.git`
+
+Then, make sure that you have Python installed. If not, go to https://www.python.org/downloads/ to get the interpreter and follow the installation instructions. After this, go to your local repository and run the following command in your terminal to install all the required packages:
 
 `pip install -r requirements.txt`
 
