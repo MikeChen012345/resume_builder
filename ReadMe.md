@@ -32,4 +32,4 @@ To use the `resume_improver.py` and `resume_rater.py`, you first need to create 
 The url parameter is designed as such to allow 3rd-party openai API. For example, you can get a free openai API at https://github.com/chatanywhere/GPT_API_free.
 
 Then, simply run the two programs using
-`python resume_improver.py` and `python resume_rater.py`. You will be asked to provide your resume and the job that you are applying for. You can also fill in the your resume in the variable `content` and your job description in the variable `theme` (only for `resume_rater.py`).
+`python resume_improver.py` and `python resume_rater.py`. You will be asked to provide your resume and a job description of the job that you are applying for. You can also fill in the your resume in the variable `content` and your job description in the variable `theme` (only for `resume_rater.py`).
