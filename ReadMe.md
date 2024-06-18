@@ -23,6 +23,8 @@ Now we can move on to build the resume! First, make sure that you have put your 
 
 The first parameter is the filename of the output PDF. The second parameter is whether to preserve the transitional LaTeX file. Note that if only one parameter exists, if the parameter is "True" or "False", then the parameter will be considered as the preserve_LaTeX_file flag. Otherwise, it will be considered as the output filename. If not specified, the default output filename will be "new_resume.pdf", and the default transitional LaTeX file will not be preserved after the generation of the PDF.
 
+You might be asked to install some LaTeX dependencies for formatting. Just follow the instructions to install them all.
+
 To use the `resume_improver.py` and `resume_rater.py`, you first need to create a file named `.env` under the local repository. Then, add the following lines inside:
 
 `url = "<your openai API url>"`
