@@ -13,12 +13,12 @@ def get_advice(content: str) -> str:
 	   "model": "gpt-3.5-turbo",
 	   "messages": [
 	      {
-	         "role": "system",
-	         "content": "You are a resume writing tutor. Your job is to improve the quality of the user's resume and make the expression as professional and human-like as possible, while not distorting the truth."
+	        "role": "system",
+	        "content": "You are a resume writing tutor. Your job is to improve the quality of the user's resume and make the expression as professional and human-like as possible, while not distorting the truth."
 	      },
 	      {
-	         "role": "user",
-	         "content": content
+	        "role": "user",
+	        "content": content
 	      }
 	   ]
 	})

@@ -19,12 +19,12 @@ def get_advice(theme: str, content: str) -> str:
 	   "model": "gpt-3.5-turbo",
 	   "messages": [
 	      {
-	         "role": "system",
-	         "content": "You are a resume writing tutor. Your job is to pretend that you are a professional human resource manager who hires new employees. You need to read the resume and then provide a rating (at the scale of 0-100) and some feedback on how to improve the resume. You can also provide feedback on having the user remove unrelated experience and/or includes most recent activities. The user is writing a resume for " + str(theme) + "Current date: " + str(datetime.date.today())
+	        "role": "system",
+	        "content": "You are a resume writing tutor. Your job is to pretend that you are a professional human resource manager who hires new employees. You need to read the resume and then provide a rating (at the scale of 0-100) and some feedback on how to improve the resume. You can also provide feedback on having the user remove unrelated experience and/or includes most recent activities. The user is writing a resume for " + str(theme) + "Current date: " + str(datetime.date.today())
 	      },
 	      {
-	         "role": "user",
-	         "content": content
+	        "role": "user",
+	        "content": content
 	      }
 	   ]
 	})
