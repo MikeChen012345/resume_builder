@@ -28,11 +28,17 @@ import sys
 
 class ResumeBuilder:
     def __init__(self):
+        # Generate the resume
+        if not os.path.exists('output'):
+            os.makedirs('output')
+
         self.personal_info = {}
         self.education = []
         self.experience = []
         self.certifications = []
         self.skills = []
+
+        self.is_loaded = False # Flag to check if a resume has been loaded/generated
 
     def load_personal_info(self, file_path):
         with open(file_path, 'r') as file:
@@ -45,7 +51,7 @@ class ResumeBuilder:
             reader = csv.DictReader(file)
             self.experience = [row for row in reader]
         return self.experience
-    
+
     def load_education(self, file_path):
         with open(file_path, 'r') as file:
             reader = csv.DictReader(file)
@@ -93,7 +99,7 @@ class ResumeBuilder:
             for exp in self.experience: 
                 exp_string = "\WorkExperience\n    {" + exp['job title'] + "}\n    {"\
                 + exp['company name'] + "}\n    {"\
-                + exp['beginning and end of employment. If currently employed write " - Present"'] + "}\n    {"\
+                + exp['beginning and end of employment'] + "}\n    {"\
                 + exp['city'] + ", " + exp['country of employment'] + "}\n    {\n"
                 for i in range(1, 6): # Support up to 5 experience explanations
                     if 'explanation' + str(i) not in exp or not exp['explanation' + str(i)]:
@@ -148,6 +154,7 @@ class ResumeBuilder:
             if os.path.exists("output/temp_resume.pdf"):
                 os.rename("output/temp_resume.pdf", f"output/{filename}.pdf")
 
+            self.is_loaded = True
             print("\nResume generated successfully!")
 
         finally:
@@ -165,6 +172,128 @@ class ResumeBuilder:
             os.remove("output/temp_resume.log")
             os.remove("output/temp_resume.out")
 
+    def clean_output_directory(self) -> bool:
+        """
+        Clean the output directory by removing all the generated PDF files.
+
+        Returns:
+            bool: True if the output directory was cleaned successfully.
+        """
+        for file in os.listdir("output"):
+            os.remove(os.path.join("output", file))
+        print("Output directory cleaned!")
+        return True
+    
+    def get_resume_content(self) -> str:
+        """
+        Get the content of the resume in plain text format (not LaTeX). This is used for the resume improver.
+
+        Returns:
+            str: The content of the resume.
+        """
+        content = ""
+        content += "Personal Information:\n"
+        for key, value in self.personal_info.items():
+            content += f"{key}: {value}\n"
+        content += "\n"
+        
+        content += "Experience:\n"
+        for exp in self.experience:
+            content += f"Job Title: {exp['job title']}\n"
+            content += f"Company: {exp['company name']}\n"
+            content += f"Employment Period: {exp['beginning and end of employment']}\n"
+            for i in range(1, 6): # Support up to 5 experience explanations
+                if 'explanation' + str(i) not in exp or not exp['explanation' + str(i)]:
+                    # No more experience entries
+                    break
+                content += f"Explanation {i}: {exp['explanation' + str(i)]}\n"
+            content += "\n"
+
+        content += "Education:\n"
+        for edu in self.education:
+            content += f"School: {edu['school name']}\n"
+            content += f"Credential: {edu['credential name']}\n"
+            content += f"Graduation Date: {edu['date of graduation']}\n"
+            content += "\n"
+
+        content += "Certifications:\n"
+        for cert in self.certifications:
+            content += f"Credential: {cert['credential name']}\n"
+            content += f"School: {cert['school name']}\n"
+            content += f"Completion Date: {cert['date of completion']}\n"
+            content += "\n"
+
+        content += "Skills:\n"
+        for skill in self.skills:
+            content += f"Skill: {skill['name']}\n"
+
+        return content
+    
+    def load_resume_from_text(self, text):
+        """
+        Load the resume data from a plain text format (not LaTeX). This is used for the resume improver.
+
+        Args:
+            text (str): The content of the resume in plain text format.
+        """
+        lines = text.split("\n")
+        section = ""
+        personal_info = {}
+        experience = []
+        education = []
+        certifications = []
+        skills = []
+        for line in lines:
+            print(line)
+            if line == "Personal Information:":
+                section = "personal_info"
+                continue
+            elif line == "Experience:":
+                section = "experience"
+                continue
+            elif line == "Education:":
+                section = "education"
+                continue
+            elif line == "Certifications:":
+                section = "certifications"
+                continue
+            elif line == "Skills:":
+                section = "skills"
+                continue
+            elif section == "personal_info":
+                key, value = line.split(": ")
+                personal_info[key] = value
+            elif section == "experience":
+                if line == "":
+                    experience.append({})
+                else:
+                    key, value = line.split(": ")
+                    experience[-1][key] = value
+            elif section == "education":
+                if line == "":
+                    education.append({})
+                else:
+                    key, value = line.split(": ")
+                    education[-1][key] = value
+            elif section == "certifications":
+                if line == "":
+                    certifications.append({})
+                else:
+                    key, value = line.split(": ")
+                    certifications[-1][key] = value
+            elif section == "skills":
+                if line == "":
+                    skills.append({})
+                else:
+                    key, value = line.split(": ")
+                    skills[-1][key] = value
+
+        self.personal_info = personal_info
+        self.experience = experience
+        self.education = education
+        self.certifications = certifications
+        self.skills = skills
+        self.is_loaded = True
 
 if __name__ == '__main__':
     # Read the arguments
@@ -198,7 +327,4 @@ if __name__ == '__main__':
     builder.load_certifications('data/certifications.csv')
     builder.load_skills('data/skills.csv')
 
-    # Generate the resume
-    if not os.path.exists('output'):
-        os.makedirs('output')
     builder.generate_resume(output_filename, preserve_latex=preserve_latex)
