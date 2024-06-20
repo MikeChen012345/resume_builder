@@ -21,8 +21,10 @@ Note: The user needs to provide the required information in the csv files before
         Currently, up to 5 experience explanations are supported.
 """
 
+import json
 import os
 import csv
+import pickle
 import time
 import sys
 
@@ -141,7 +143,6 @@ class ResumeBuilder:
             file.write("\n\end{SkillsList}")
             file.write("\n\n")
 
-
             # End of the LaTeX document
             file.write("\end{document}")
         
@@ -157,6 +158,9 @@ class ResumeBuilder:
             self.is_loaded = True
             print("\nResume generated successfully!")
 
+            # Save the resume builder data to a file
+            self.save_resume_builder_pkl(filename)
+
         finally:
             # Clean up temporary files
             time.sleep(1)
@@ -171,19 +175,91 @@ class ResumeBuilder:
             os.remove("output/temp_resume.aux")
             os.remove("output/temp_resume.log")
             os.remove("output/temp_resume.out")
-
-    def clean_output_directory(self) -> bool:
+    
+    def get_resume_builder_json(self) -> str:
         """
-        Clean the output directory by removing all the generated PDF files.
+        Get the resume builder data in JSON format.
 
         Returns:
-            bool: True if the output directory was cleaned successfully.
+            str: The resume builder data in JSON format.
         """
-        for file in os.listdir("output"):
-            os.remove(os.path.join("output", file))
-        print("Output directory cleaned!")
-        return True
+        resume_builder = {
+            "personal_info": self.personal_info,
+            "experience": self.experience,
+            "education": self.education,
+            "certifications": self.certifications,
+            "skills": self.skills
+        }
+        return json.dumps(resume_builder)
     
+    def save_resume_builder_pkl(self, filename="new_resume") -> bool:
+        """
+        Save the resume builder data to a file using pickling (serialization).
+        All the saved .pkl files are stored in the 'saved' directory.
+
+        Args:
+            filename (str): Name of the output file.
+
+        Returns:
+            bool: True if the resume builder data was saved successfully.
+        """
+        try:
+            if not os.path.exists("saved"):
+                os.makedirs("saved")
+            with open(f"saved/{filename}.pkl", 'wb') as file:
+                pickle.dump(self, file)
+            print("Resume builder data saved successfully!")
+            return True
+        except Exception as e:
+            print(f"Error: {e}")
+            return False
+
+    def load_resume_builder_json(self, json_str) -> bool:
+        """
+        Load the resume builder data from a JSON string.
+
+        Args:
+            json_str (str): The resume builder data in JSON format.
+
+        Returns:
+            bool: True if the resume builder data was loaded successfully.
+        """
+        try:
+            resume_builder = json.loads(json_str)
+            self.personal_info = resume_builder["personal_info"]
+            self.experience = resume_builder["experience"]
+            self.education = resume_builder["education"]
+            self.certifications = resume_builder["certifications"]
+            self.skills = resume_builder["skills"]
+            self.is_loaded = True
+            print("Resume builder data loaded successfully!")
+            return True
+        except Exception as e:
+            print(f"Error: {e}")
+            return False
+
+    def load_resume_builder_pkl(self, filepath) -> bool:
+        """
+        Load the resume builder data from a file using pickling (deserialization).
+
+        Args:
+            filepath (str): Path of the input file.
+
+        Returns:
+            bool: True if the resume builder data was loaded successfully.
+        """
+        with open(filepath, 'rb') as file:
+            resume_builder = pickle.load(file)
+        self.personal_info = resume_builder.personal_info
+        self.experience = resume_builder.experience
+        self.education = resume_builder.education
+        self.certifications = resume_builder.certifications
+        self.skills = resume_builder.skills
+        self.is_loaded = True
+        print("Resume builder data loaded successfully!")
+        return True
+
+
     def get_resume_content(self) -> str:
         """
         Get the content of the resume in plain text format (not LaTeX). This is used for the resume improver.

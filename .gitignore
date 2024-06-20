@@ -1,3 +1,9 @@
+# Created by https://www.toptal.com/developers/gitignore/api/python
+
+# .pdf or .pkl files generated
+*.pdf
+*.pkl
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

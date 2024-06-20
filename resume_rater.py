@@ -19,26 +19,29 @@ class ResumeRater:
 		pass
 
 	def get_advice(self, theme: str, content: str) -> str:
-		payload = json.dumps({
-		"model": "gpt-3.5-turbo",
-		"messages": [
-			{
-				"role": "system",
-				"content": "You are a resume writing tutor. Your job is to pretend that you are a professional human resource manager who hires new employees. You need to read the resume and then provide a rating (at the scale of 0-100) and some feedback on how to improve the resume. You can also provide feedback on having the user remove unrelated experience and/or includes most recent activities. The user is writing a resume for " + str(theme) + "Current date: " + str(datetime.date.today())
-			},
-			{
-				"role": "user",
-				"content": content
-			}
-		]
-		})
-		headers = {
-		'Authorization': 'Bearer ' + auth_key,
-		'User-Agent': 'Apifox/1.0.0 (https://apifox.com)',
-		'Content-Type': 'application/json'
-		}
-		
+		if url is None or auth_key is None:
+			return Exception("Please set the url and auth_key in the .env file")
+
 		try:
+			payload = json.dumps({
+			"model": "gpt-3.5-turbo",
+			"messages": [
+				{
+					"role": "system",
+					"content": "You are a resume writing tutor. Your job is to pretend that you are a professional human resource manager who hires new employees. You need to read the resume and then provide a rating (at the scale of 0-100) and some feedback on how to improve the resume. You can also provide feedback on having the user remove unrelated experience and/or includes most recent activities. The user is writing a resume for " + str(theme) + "Current date: " + str(datetime.date.today())
+				},
+				{
+					"role": "user",
+					"content": content
+				}
+			]
+			})
+			headers = {
+			'Authorization': 'Bearer ' + auth_key,
+			'User-Agent': 'Apifox/1.0.0 (https://apifox.com)',
+			'Content-Type': 'application/json'
+			}
+		
 			response = json.loads(requests.request("POST", url, headers=headers, data=payload).text)
 			
 			#print(response)

@@ -1,4 +1,4 @@
 job title,company name,beginning and end of employment,city,country of employment,explanation1,explanation2,explanation3,explanation4,explanation5
-Job1,Company1,2010-2021,City1,Country1,Explanation1,Explanation2,Explanation3,Explanation4,Explanation5
-Job2,Company2,2015-2018,City2,Country2,Explanation1,Explanation2,Explanation3,Explanation4,Explanation5
-Job3,Company3,2018-present,City3,Country3,Explanation1,Explanation2,Explanation3,Explanation4,Explanation5
+Software Engineer,Google,2019-2021,Mountain View,USA,Developed new features for Google Search,Improved the performance of Google Search by 20%,Led a team of 5 engineers,Implemented automated testing for Google Search,Presented at Google I/O 2020
+Data Scientist,Facebook,2017-2019,Menlo Park,USA,Analyzed user data to improve Facebook's algorithms,Developed a new recommendation algorithm,Published a paper on machine learning,Presented at Facebook F8 2018,Mentored junior data scientists
+Intern,Microsoft,2016-2017,Redmond,USA,Worked on the development of Microsoft Office,Implemented a new feature in Microsoft Word,Improved the performance of Microsoft Excel by 10%,Received the Intern of the Year award,Presented at Microsoft Build 2017

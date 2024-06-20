@@ -1,6 +1,7 @@
 import os
+import time
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox, filedialog
 from resume_builder import ResumeBuilder
 from resume_improver import ResumeImprover
 from resume_rater import ResumeRater
@@ -21,9 +22,21 @@ class ResumeBuilderGUI:
         self.fill_env_button = tk.Button(self.sidebar, text="Fill .env File", command=self.fill_env)
         self.fill_env_button.pack()
 
-        # Button for loading/changing the resume PDF file: allows the user to select a new resume PDF file
-        #self.load_resume_button = tk.Button(self.sidebar, text="Load Resume PDF", command=self.load_resume)
-        #self.load_resume_button.pack()
+        # Button for saving the current resume builder to a file
+        self.save_button = tk.Button(self.sidebar, text="Save Resume Builder", command=self.save_state)
+        self.save_button.pack()
+
+        # Button for loading a resume builder from a file
+        self.load_button = tk.Button(self.sidebar, text="Load Resume Builder", command=self.load_state)
+        self.load_button.pack()
+
+        # Clean the output directory button
+        self.clean_button = tk.Button(self.sidebar, text="Clean Output Directory", command=self.clean_output_directory)
+        self.clean_button.pack()
+
+        # Clean the saved directory button
+        self.clean_button = tk.Button(self.sidebar, text="Clean Saved Directory", command=self.clean_saved_directory)
+        self.clean_button.pack()
 
         ## Main Section
 
@@ -43,10 +56,6 @@ class ResumeBuilderGUI:
         # Generate button
         self.generate_button = tk.Button(window, text="Generate Resume", command=self.generate_resume)
         self.generate_button.pack()
-
-        # Clean the output directory button
-        self.clean_button = tk.Button(window, text="Clean Output Directory", command=self.clean_output_directory)
-        self.clean_button.pack()
 
         # Resume improver and resume rater buttons, an input text box only for resume rater, 
         # and the feedback text box
@@ -90,6 +99,28 @@ class ResumeBuilderGUI:
         self.save_button = tk.Button(self.env_window, text="Save", command=save_env)
         self.save_button.pack()
 
+    def save_state(self):
+        filename = self.filename_entry.get()
+        if len(filename.strip()) == 0:
+            messagebox.showerror("Resume Builder", "Please enter a filename!")
+            return
+        if not self.builder.is_loaded:
+            messagebox.showerror("Resume Builder", "Empty resume builder! Please generate a resume first!")
+            return
+        self.builder.save_resume_builder_pkl(filename)
+        messagebox.showinfo("Resume Builder", "Resume builder state saved successfully!")
+        self.feedback_text.delete("1.0", tk.END)
+        self.feedback_text.insert(tk.END, "Resume builder state saved successfully!")
+
+    def load_state(self):
+        filename = filedialog.askopenfilename(initialdir="saved", title="Select file", filetypes=((".pkl files", "*.pkl"),))
+        if len(filename.strip()) == 0: # the user closed the dialog and didn't select a file
+            return
+        self.builder.load_resume_builder_pkl(filename)
+        messagebox.showinfo("Resume Builder", "Resume builder state loaded successfully!")
+        self.feedback_text.delete("1.0", tk.END)
+        self.feedback_text.insert(tk.END, "Resume builder state loaded successfully!")
+
     def generate_resume(self):
         output_filename = self.filename_entry.get()
         preserve_latex = self.preserve_var.get()
@@ -108,24 +139,53 @@ class ResumeBuilderGUI:
         except Exception as e:
             messagebox.showerror("Resume Builder", f"Error: {e}")
 
-    def clean_output_directory(self):
-        self.builder.clean_output_directory()
+    def clean_output_directory(self) -> bool:
+        """
+        Clean the output directory by removing all the generated PDF files.
+
+        Returns:
+            bool: True if the output directory was cleaned successfully.
+        """
+        for file in os.listdir("output"):
+            os.remove(os.path.join("output", file))
+        print("Output directory cleaned!")
         messagebox.showinfo("Resume Builder", "Output directory cleaned!")
+        return True
+
+    def clean_saved_directory(self) -> bool:
+        """
+        Clean the saved directory by removing all the saved resume builder files.
+
+        Returns:
+            bool: True if the saved directory was cleaned successfully.
+        """
+        for file in os.listdir("saved"):
+            os.remove(os.path.join("saved", file))
+        print("Saved directory cleaned!")
+        messagebox.showinfo("Resume Builder", "Saved directory cleaned!")
+        return True
 
     def improve_resume(self):
-        content = self.builder.get_resume_content()
+        content = self.builder.get_resume_builder_json()
+        print(content)
         if not self.builder.is_loaded:
             messagebox.showerror("Resume Builder", "Please generate a resume first!")
             return
 
         resume_improver = ResumeImprover()
-        reply_text = resume_improver.get_advice(content)
+        reply_text = resume_improver.get_advice(content, prompt="You are a resume writing tutor. Your job is to improve the quality of the user's resume and make the expression as professional and human-like as possible, while not distorting the truth. Please provide the improved version of the resume following the original JSON format. DO NOT change ANY of the keys.")
         self.feedback_text.delete("1.0", tk.END)
         self.feedback_text.insert(tk.END, reply_text)
 
-        improve_resume_builder = ResumeBuilder()
-        improve_resume_builder.load_resume_from_text(reply_text)
-        improve_resume_builder.generate_resume("improved_resume", preserve_latex=False)
+        if not isinstance(reply_text, Exception):
+            improve_resume_builder = ResumeBuilder()
+            improve_resume_builder.load_resume_builder_json(reply_text)
+            print(improve_resume_builder.get_resume_builder_json())
+            print(improve_resume_builder.personal_info)
+            improve_resume_builder.generate_resume("improved_resume_" + time.strftime("%Y-%m-%d-%H_%M_%S"), preserve_latex=False)
+            messagebox.showinfo("Resume Builder", "Resume improved successfully!")
+        else:
+            messagebox.showerror("Resume Builder", f"Error: {reply_text}")
 
     def rate_resume(self):
         content = self.builder.get_resume_content()
@@ -142,6 +202,11 @@ class ResumeBuilderGUI:
         reply_text = resume_rater.get_advice(theme, content)
         self.feedback_text.delete("1.0", tk.END)
         self.feedback_text.insert(tk.END, reply_text)
+
+        if not isinstance(reply_text, Exception):
+            messagebox.showinfo("Resume Builder", "Resume rated successfully!")
+        else:
+            messagebox.showerror("Resume Builder", f"Error: {reply_text}")
 
 if __name__ == "__main__":
     root = tk.Tk()
