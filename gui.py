@@ -38,6 +38,10 @@ class ResumeBuilderGUI:
         self.clean_button = tk.Button(self.sidebar, text="Clean Saved Directory", command=self.clean_saved_directory)
         self.clean_button.pack()
 
+        # Compile a resume PDF from LaTeX button
+        self.compile_button = tk.Button(self.sidebar, text="Compile Resume PDF", command=self.compile_resume_from_latex)
+        self.compile_button.pack()
+
         ## Main Section
 
         self.builder = ResumeBuilder()
@@ -113,16 +117,19 @@ class ResumeBuilderGUI:
         self.feedback_text.insert(tk.END, "Resume builder state saved successfully!")
 
     def load_state(self):
-        filename = filedialog.askopenfilename(initialdir="saved", title="Select file", filetypes=((".pkl files", "*.pkl"),))
-        if len(filename.strip()) == 0: # the user closed the dialog and didn't select a file
+        filepath = filedialog.askopenfilename(initialdir="saved", title="Select file", filetypes=((".pkl files", "*.pkl"),))
+        if len(filepath.strip()) == 0: # the user closed the dialog and didn't select a file
             return
-        self.builder.load_resume_builder_pkl(filename)
+        self.builder.load_resume_builder_pkl(filepath)
         messagebox.showinfo("Resume Builder", "Resume builder state loaded successfully!")
         self.feedback_text.delete("1.0", tk.END)
         self.feedback_text.insert(tk.END, "Resume builder state loaded successfully!")
 
     def generate_resume(self):
         output_filename = self.filename_entry.get()
+        if len(output_filename.strip()) == 0:
+            messagebox.showerror("Resume Builder", "Please enter a filename for the output PDF in the Output Filename field!")
+            return
         preserve_latex = self.preserve_var.get()
 
         # Load data from csv files
@@ -207,6 +214,46 @@ class ResumeBuilderGUI:
             messagebox.showinfo("Resume Builder", "Resume rated successfully!")
         else:
             messagebox.showerror("Resume Builder", f"Error: {reply_text}")
+
+    def compile_resume_from_latex(self):
+        filename = self.filename_entry.get()
+        if len(filename.strip()) == 0:
+            messagebox.showerror("Resume Builder", "Please enter a filename for the output PDF in the Output Filename field!")
+            return
+        
+        latex_filepath = filedialog.askopenfilename(initialdir="output", title="Select file", filetypes=((".tex files", "*.tex"),))
+        if len(latex_filepath.strip()) == 0: # the user closed the dialog and didn't select a file
+            return
+        self.builder = ResumeBuilder()
+        
+        try:
+            # Compile the LaTeX file to generate the PDF
+            print("Outputing resume pdf...")
+            os.system(f'xelatex "{latex_filepath}" -output-directory=output -interaction=nonstopmode')
+
+            # Check if the PDF file was generated successfully and rename it
+            latex_filename = latex_filepath.split("/")[-1].removesuffix(".tex")
+            if os.path.exists(f"output/{latex_filename}.pdf"):
+                os.rename(f"output/{latex_filename}.pdf", f"output/{filename}.pdf")
+
+            self.builder.is_loaded = True
+            print("\nResume generated successfully!")
+
+            # Save the resume builder data to a file
+            self.builder.save_resume_builder_pkl(filename)
+            messagebox.showinfo("Resume Builder", "Resume compiled successfully!")
+        except Exception as e:
+            print(f"Error: {e}")
+            messagebox.showerror("Resume Builder", f"Error: {e}")
+        
+        finally:
+            # Clean up temporary files
+            time.sleep(1)
+            if os.path.exists(f"output/{latex_filename}.pdf"):
+                os.remove(f"output/{latex_filename}.pdf")
+            os.remove(f"output/{latex_filename}.aux")
+            os.remove(f"output/{latex_filename}.log")
+            os.remove(f"output/{latex_filename}.out")
 
 if __name__ == "__main__":
     root = tk.Tk()
