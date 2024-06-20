@@ -19,27 +19,27 @@ class ResumeBuilderGUI:
 
         # Button for filling in .env file: opens a new window with text boxes for the user to 
         # fill in the API URL and the API key
-        self.fill_env_button = tk.Button(self.sidebar, text="Fill .env File", command=self.fill_env)
+        self.fill_env_button = tk.Button(self.sidebar, text="Fill .env File", command=self.fill_env, width=20, height=2)
         self.fill_env_button.pack()
 
         # Button for saving the current resume builder to a file
-        self.save_button = tk.Button(self.sidebar, text="Save Resume Builder", command=self.save_state)
+        self.save_button = tk.Button(self.sidebar, text="Save Resume Builder", command=self.save_state, width=20, height=2)
         self.save_button.pack()
 
         # Button for loading a resume builder from a file
-        self.load_button = tk.Button(self.sidebar, text="Load Resume Builder", command=self.load_state)
+        self.load_button = tk.Button(self.sidebar, text="Load Resume Builder", command=self.load_state, width=20, height=2)
         self.load_button.pack()
 
         # Clean the output directory button
-        self.clean_button = tk.Button(self.sidebar, text="Clean Output Directory", command=self.clean_output_directory)
+        self.clean_button = tk.Button(self.sidebar, text="Clean Output Directory", command=self.clean_output_directory, width=20, height=2)
         self.clean_button.pack()
 
         # Clean the saved directory button
-        self.clean_button = tk.Button(self.sidebar, text="Clean Saved Directory", command=self.clean_saved_directory)
+        self.clean_button = tk.Button(self.sidebar, text="Clean Saved Directory", command=self.clean_saved_directory, width=20, height=2)
         self.clean_button.pack()
 
         # Compile a resume PDF from LaTeX button
-        self.compile_button = tk.Button(self.sidebar, text="Compile Resume PDF", command=self.compile_resume_from_latex)
+        self.compile_button = tk.Button(self.sidebar, text="Compile Resume PDF", command=self.compile_resume_from_latex, width=20, height=2)
         self.compile_button.pack()
 
         ## Main Section
@@ -58,14 +58,14 @@ class ResumeBuilderGUI:
         self.preserve_check.pack()
 
         # Generate button
-        self.generate_button = tk.Button(window, text="Generate Resume", command=self.generate_resume)
+        self.generate_button = tk.Button(window, text="Generate Resume", command=self.generate_resume, width=20, height=2)
         self.generate_button.pack()
 
         # Resume improver and resume rater buttons, an input text box only for resume rater, 
         # and the feedback text box
-        self.improve_button = tk.Button(window, text="Improve Resume", command=self.improve_resume)
+        self.improve_button = tk.Button(window, text="Improve Resume", command=self.improve_resume, width=20, height=2)
         self.improve_button.pack()
-        self.rate_button = tk.Button(window, text="Rate Resume", command=self.rate_resume)
+        self.rate_button = tk.Button(window, text="Rate Resume", command=self.rate_resume, width=20, height=2)
         self.rate_button.pack()
         self.input_text_label = tk.Label(window, text="Input Text:")
         self.input_text_label.pack()
@@ -225,7 +225,7 @@ class ResumeBuilderGUI:
         if len(latex_filepath.strip()) == 0: # the user closed the dialog and didn't select a file
             return
         self.builder = ResumeBuilder()
-        
+
         try:
             # Compile the LaTeX file to generate the PDF
             print("Outputing resume pdf...")
