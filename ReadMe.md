@@ -51,6 +51,9 @@ You can find various buttons on the side bar. This includes:
 * Clean output directory: clean the output directory. This includes the PDF files that have been generated.
 * Clean saved directory: clean the saved directory. This includes the saved progress of the resume builder (.pkl).
 * Compile resume PDF: compile the resume PDF from a chosen .tex file. This is useful if you want to compile the PDF manually. You need to first enter a desired output filename in the "Output Filename" textbox and then choose the .tex file that you want to compile.
+* Generate LaTeX file: generate the LaTeX file from the information that you have filled in the CSV files. You need to first enter a desired output filename in the "Output Filename" textbox. Then you are prompted to choose a LaTeX template file (.tex) that you want to use (The template can be filled with example information). The generated LaTeX file and the compiled PDF will be saved in the `\output` folder.
+
+_Note: the "Generate LaTeX file" feature is very unstable and may not work properly. Please use it with caution. You can retry or manually fix the syntax error in the generated .tex file and recompile using the "Compile resume PDF" feature._
 
 _Note: during the generation, the software may be stuck due to waiting for responses from the url. Please wait patiently._
 
@@ -81,6 +84,12 @@ The url parameter is designed as such to allow 3rd-party openai API. For example
 Then, simply run the two programs using
 `python resume_improver.py` and `python resume_rater.py`. You will be asked to provide your resume and a job description of the job that you are applying for. You can also fill in the your resume in the variable `content` and your job description in the variable `theme` (only for `resume_rater.py`).
 
+The resume latex generator is also available via the commandline. After changing the parameters in `resume_latex_generator.py`, you can run the following command to generate the LaTeX file:
+
+`python latex_generator.py`
+
+_Note: the "Generate LaTeX file" feature is very unstable and may not work properly. Please use it with caution. You can retry or manually fix the syntax error in the generated .tex file and recompile using the "Compile resume PDF" feature._
+
 _Note: during the generation, the software may be stuck due to waiting for responses from the url. Please wait patiently._
 
 # Trouble Shooting
@@ -92,6 +101,14 @@ For MacOS, try changing `python` into `python3` and leaving the other parts the 
 ## The resume improver fails to create new resume. What should I do?
 
 The current resume improver can be unstable because sometimes GPT changes the format, causing the resume improver to fail to recognize the response. You can retry and it should be working within a few tries.
+
+## The application is stuck during the generation of the resume. What should I do?
+
+The application may be stuck due to waiting for responses from the url. Please wait patiently.
+
+## The application does not work properly. What should I do?
+
+Due to the usage of large language models, the response from the models can be unstable. Please retry the application and it should work within a few tries. For the "generate from template" or `resume_latex_generator.py` feature, you may also want to manually fix the syntax error in the generated .tex file and recompile using the "Compile resume PDF" feature.
 
 ## Other issues/bugs
 

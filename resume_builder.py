@@ -265,7 +265,6 @@ class ResumeBuilder:
         print("Resume builder data loaded successfully!")
         return True
 
-
     def get_resume_content(self) -> str:
         """
         Get the content of the resume in plain text format (not LaTeX). This is used for the resume improver.

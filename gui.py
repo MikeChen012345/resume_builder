@@ -5,6 +5,7 @@ from tkinter import messagebox, filedialog
 from resume_builder import ResumeBuilder
 from resume_improver import ResumeImprover
 from resume_rater import ResumeRater
+from resume_latex_generator import ResumeLatexGenerator
 
 class ResumeBuilderGUI:
     def __init__(self, window):
@@ -41,6 +42,10 @@ class ResumeBuilderGUI:
         # Compile a resume PDF from LaTeX button
         self.compile_button = tk.Button(self.sidebar, text="Compile Resume PDF", command=self.compile_resume_from_latex, width=20, height=2)
         self.compile_button.pack()
+
+        # Generate a resume PDF from a LaTeX template button
+        self.generate_button = tk.Button(self.sidebar, text="Generate from Template", command=self.generate_resume_from_template_latex, width=20, height=2)
+        self.generate_button.pack()
 
         ## Main Section
 
@@ -187,8 +192,6 @@ class ResumeBuilderGUI:
         if not isinstance(reply_text, Exception):
             improve_resume_builder = ResumeBuilder()
             improve_resume_builder.load_resume_builder_json(reply_text)
-            print(improve_resume_builder.get_resume_builder_json())
-            print(improve_resume_builder.personal_info)
             improve_resume_builder.generate_resume("improved_resume_" + time.strftime("%Y-%m-%d-%H_%M_%S"), preserve_latex=False)
             messagebox.showinfo("Resume Builder", "Resume improved successfully!")
         else:
@@ -218,7 +221,7 @@ class ResumeBuilderGUI:
     def compile_resume_from_latex(self):
         filename = self.filename_entry.get()
         if len(filename.strip()) == 0:
-            messagebox.showerror("Resume Builder", "Please enter a filename for the output PDF in the Output Filename field!")
+            messagebox.showerror("Resume Compiler", "Please enter a filename for the output PDF in the Output Filename field!")
             return
         
         latex_filepath = filedialog.askopenfilename(initialdir="output", title="Select file", filetypes=((".tex files", "*.tex"),))
@@ -241,19 +244,97 @@ class ResumeBuilderGUI:
 
             # Save the resume builder data to a file
             self.builder.save_resume_builder_pkl(filename)
-            messagebox.showinfo("Resume Builder", "Resume compiled successfully!")
+            messagebox.showinfo("Resume Compiler", "Resume compiled successfully!")
+
         except Exception as e:
             print(f"Error: {e}")
-            messagebox.showerror("Resume Builder", f"Error: {e}")
+            messagebox.showerror("Resume Compiler", f"Error: {e}")
         
         finally:
             # Clean up temporary files
             time.sleep(1)
-            if os.path.exists(f"output/{latex_filename}.pdf"):
-                os.remove(f"output/{latex_filename}.pdf")
-            os.remove(f"output/{latex_filename}.aux")
-            os.remove(f"output/{latex_filename}.log")
-            os.remove(f"output/{latex_filename}.out")
+            if os.path.exists("output/temp_resume.pdf"):
+                os.remove("output/temp_resume.pdf")
+
+            # Remove auxiliary files
+            try:
+                os.remove("output/temp_resume.aux")
+                os.remove("output/temp_resume.log")
+                os.remove("output/temp_resume.out")
+            except:
+                pass
+
+    def generate_resume_from_template_latex(self):
+        filename = self.filename_entry.get()
+        if len(filename.strip()) == 0:
+            messagebox.showerror("Resume LaTeX Generator", "Please enter a filename for the output PDF in the Output Filename field!")
+            return
+
+        template_filepath = filedialog.askopenfilename(initialdir="templates", title="Select the LaTeX template file", filetypes=((".tex files", "*.tex"),))
+        if len(template_filepath.strip()) == 0:
+            return
+        
+        # Load data from csv files
+        self.builder = ResumeBuilder()
+        self.builder.load_personal_info('data/personal_info.csv')
+        self.builder.load_education('data/education.csv')
+        self.builder.load_experience('data/experience.csv')
+        self.builder.load_certifications('data/certifications.csv')
+        self.builder.load_skills('data/skills.csv')
+        self.builder.is_loaded = True
+
+        resume_latex_generator = ResumeLatexGenerator()
+        data = self.builder.get_resume_content()
+        with open(template_filepath, 'r', encoding="utf-8") as file:
+            template = file.read()
+        
+        if len(data) == 0:
+            messagebox.showerror("Resume LaTeX Generator", "Please provide the user's information!")
+            return
+        
+        if len(template) == 0: 
+            messagebox.showerror("Resume LaTeX Generator", "Please provide a non-empty LaTeX example file!")
+            return
+
+        try:
+            # Generate the resume from the template LaTeX file
+            reply_text = resume_latex_generator.get_latex(data, template)
+            if isinstance(reply_text, Exception):
+                messagebox.showerror("Resume LaTeX Generator", f"Error: {reply_text}")
+
+            # Save the generated LaTeX file
+            with open(f"output/{filename}.tex", 'w', encoding="utf-8") as file:
+                file.write(reply_text)
+
+            self.feedback_text.delete("1.0", tk.END)
+            self.feedback_text.insert(tk.END, reply_text)
+
+            # Compile the LaTeX file to generate the PDF
+            print("Outputing resume pdf...")
+            try:
+                os.system(f'xelatex "output/{filename}.tex" -output-directory=output -interaction=nonstopmode')
+            except Exception as e:
+                print(f"Error: {e}")
+                messagebox.showerror("Resume LaTeX Generator", f"Error: {e}")
+
+            # Save the resume builder data to a file
+            self.builder.save_resume_builder_pkl(filename)
+            messagebox.showinfo("Resume LaTeX Generator", "Resume generated successfully!")
+
+        except Exception as e:
+            messagebox.showerror("Resume LaTeX Generator", f"Error: {e}")
+
+        finally:
+            time.sleep(1)
+
+            # Remove auxiliary files
+            try:
+                os.remove(f"output/{filename}.aux")
+                os.remove(f"output/{filename}.log")
+                os.remove(f"output/{filename}.out")
+            except:
+                pass
+
 
 if __name__ == "__main__":
     root = tk.Tk()
