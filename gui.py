@@ -54,7 +54,7 @@ class ResumeBuilderGUI:
 
         # Preserve LaTeX file
         self.preserve_var = tk.BooleanVar()
-        self.preserve_check = tk.Checkbutton(window, text="Preserve LaTeX file", variable=self.preserve_var)
+        self.preserve_check = tk.Checkbutton(window, text="Preserve LaTeX File", variable=self.preserve_var)
         self.preserve_check.pack()
 
         # Generate button

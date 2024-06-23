@@ -23,11 +23,34 @@ Now we can move on to build the resume!
 
 # Using the GUI
 
-First, make sure that you have put your information correctly in all the CSV files in the `\data` folder.
+First, make sure that you have put your information correctly in all the CSV files in the `\data` folder. We have provided some example in the CSV files, so you can remove the example and fill in your own information in the same way.
 
 Then, run the following command in your terminal to open the GUI:
 
 `python gui.py`
+
+## The main window
+
+You can find various buttons on the main window. This includes:
+
+* Generate resume: generate the resume from the information that you have filled in the CSV files. You need to first enter a desired output filename in the "Output Filename" textbox. The generated resume will be saved in the `\output` folder. There is also an option "Preserver LaTeX File" to preserve the transitional LaTeX file after the generation of the PDF. This is useful if you want to manually compile the PDF.
+
+* Resume improver: improve the resume from the information that you have filled in the CSV files. The improved resume will be saved in the `\output` folder. The name will be "improved_resume_\<time generated>".
+
+* Resume rater: rate the resume from the information that you have filled in the CSV files. You need to first enter the theme of your resume (i.e., what position the resume is for) in the "Input Text" textbox. The rating and the feedback will be shown in the "Feedback" textbox.
+
+_Note: during the generation, the software may be stuck due to waiting for responses from the url. Please wait patiently._
+
+## The side bar
+
+You can find various buttons on the side bar. This includes:
+
+* Fill .env file: fill in the .env file for the resume improver and rater. This includes the url (in case that you choose to use a 3rd-party AI model) and the API-key. You can get the API key at https://beta.openai.com/signup/, or you can get a free openai API at https://github.com/chatanywhere/GPT_API_free.
+* Save resume builder: save the current progress of the resume builder. This includes the information that you have filled in the CSV files. You need to first enter a desired output filename in the "Output Filename" textbox. The saved file will be saved in the `\saved` folder and in the .pkl format.
+* Load resume builder: load the saved progress of a chosen resume builder. This includes the information that you have filled in the CSV files. The saved file is in the .pkl format.
+* Clean output directory: clean the output directory. This includes the PDF files that have been generated.
+* Clean saved directory: clean the saved directory. This includes the saved progress of the resume builder (.pkl).
+* Compile resume PDF: compile the resume PDF from a chosen .tex file. This is useful if you want to compile the PDF manually. You need to first enter a desired output filename in the "Output Filename" textbox and then choose the .tex file that you want to compile.
 
 _Note: during the generation, the software may be stuck due to waiting for responses from the url. Please wait patiently._
 

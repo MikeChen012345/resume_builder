@@ -2,7 +2,7 @@
 %                Identification
 %-------------------------------------------------------------------------------
 
-\ProvidesClass{resume_config}[2023 v1.0 resume_config]
+\ProvidesClass{resume_config_1}[2023 v1.0 resume_config]
 \NeedsTeXFormat{LaTeX2e}
 
 %-------------------------------------------------------------------------------
@@ -34,8 +34,6 @@
 \RequirePackage{etoolbox}
 \RequirePackage{setspace}
 \RequirePackage{lipsum}
-
-%\setmainfont{TeX Gyre Heros} % adjust font style here
 
 % Additional fonts can be found at the following URL: https://www.draketo.de/anderes/latex-fonts.html#org9f59ea3
 

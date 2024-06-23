@@ -7,7 +7,8 @@ in csv format. The resume is then generated using the data provided by the user 
 
 Files required:
 - builder.py (this file)
-- resume_config.cls
+- templates/
+    - resume_config.cls
 - data/
     - personal_info.csv
     - education.csv
@@ -83,7 +84,7 @@ class ResumeBuilder:
         # Generate and compile the LaTeX resume
         with open("temp_resume.tex", 'w') as file:
             # Start of the LaTeX document
-            file.write("\documentclass[letterpaper]{resume_config}\n\n")
+            file.write("\documentclass[letterpaper]{templates/resume_config}\n\n")
             file.write(r"\begin{document}")
             file.write("\n\n")
             
@@ -172,9 +173,14 @@ class ResumeBuilder:
                 #os.remove("temp_resume.fls")
             else:
                 os.rename("temp_resume.tex", f"output/{filename}.tex")
-            os.remove("output/temp_resume.aux")
-            os.remove("output/temp_resume.log")
-            os.remove("output/temp_resume.out")
+
+            # Remove auxiliary files
+            try:
+                os.remove("output/temp_resume.aux")
+                os.remove("output/temp_resume.log")
+                os.remove("output/temp_resume.out")
+            except:
+                pass
     
     def get_resume_builder_json(self) -> str:
         """
