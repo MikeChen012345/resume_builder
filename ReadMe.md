@@ -21,7 +21,7 @@ Then, make sure that you have Python installed. If not, go to https://www.python
 
 `pip install -r requirements.txt`
 
-Then, if you have not, get LaTeX at https://miktex.org/download. Make sure that you get the version that corresponds to your system.
+Then, if you have not, get LaTeX at https://miktex.org/download. <u>Make sure that you get the version that corresponds to your system and follow the installation instructions</u>.
 
 Now we can move on to build the resume! 
 
