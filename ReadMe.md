@@ -13,6 +13,10 @@ To start using the resume builder, simply clone the repository to your local rep
 
 `git clone git@github.com:MikeChen012345/resume_builder.git`
 
+or
+
+`git clone https://github.com/MikeChen012345/resume_builder.git`
+
 Then, make sure that you have Python installed. If not, go to https://www.python.org/downloads/ to get the interpreter and follow the installation instructions. After this, go to your local repository and run the following command in your terminal to install all the required packages:
 
 `pip install -r requirements.txt`
@@ -94,9 +98,9 @@ _Note: during the generation, the software may be stuck due to waiting for respo
 
 # Trouble Shooting
 
-## I am using MacOS and the `python` commands do not work for me
+## I am using MacOS and the `python`/`pip` commands do not work for me
 
-For MacOS, try changing `python` into `python3` and leaving the other parts the same.
+For MacOS, try changing `python` into `python3`, `pip` into `pip3` and leaving the other parts the same.
 
 ## The resume improver fails to create new resume. What should I do?
 
