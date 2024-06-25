@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 import tkinter as tk
 from tkinter import messagebox, filedialog
@@ -9,6 +10,7 @@ from resume_latex_generator import ResumeLatexGenerator
 
 class ResumeBuilderGUI:
     def __init__(self, window):
+        os.chdir(sys.path[0]) # Change the current working directory to the script's directory
 
         ## Header Section
         self.window = window
@@ -232,7 +234,7 @@ class ResumeBuilderGUI:
         try:
             # Compile the LaTeX file to generate the PDF
             print("Outputing resume pdf...")
-            os.system(f'xelatex "{latex_filepath}" -output-directory=output -interaction=nonstopmode')
+            os.system(f'latex\\xelatex "{latex_filepath}" -output-directory=output -interaction=nonstopmode')
 
             # Check if the PDF file was generated successfully and rename it
             latex_filename = latex_filepath.split("/")[-1].removesuffix(".tex")
@@ -312,7 +314,7 @@ class ResumeBuilderGUI:
             # Compile the LaTeX file to generate the PDF
             print("Outputing resume pdf...")
             try:
-                os.system(f'xelatex "output/{filename}.tex" -output-directory=output -interaction=nonstopmode')
+                os.system(f'latex\\xelatex "output/{filename}.tex" -output-directory=output -interaction=nonstopmode')
             except Exception as e:
                 print(f"Error: {e}")
                 messagebox.showerror("Resume LaTeX Generator", f"Error: {e}")
