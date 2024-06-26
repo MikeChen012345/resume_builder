@@ -9,6 +9,18 @@ The project also includes an AI resume improver, which elaborates the wording an
 
 # Getting Started
 
+
+# The Release Version
+
+The Release version for Windows is now available at https://github.com/MikeChen012345/resume_builder/releases. You can download the latest version there without needing to go through some of the process below.
+
+Due to the limitation of the system, it is not possible to use LaTeX without full installation. If you have not, get LaTeX at https://miktex.org/download. <u>Make sure that you get the version that corresponds to your system and follow the installation instructions</u>.
+
+First, make sure that you have put your information correctly in all the CSV files in the `\data` folder. We have provided some example in the CSV files, so you can remove the example and fill in your own information in the same way.
+
+Then, simply run the `.exe` file in the folder. You can find various buttons on the main window. Please go to the [Using the GUI section](https://github.com/MikeChen012345/resume_builder#Using-the-GUI) for more information.
+
+# The Code Version
 To start using the resume builder, simply clone the repository to your local repository by using the following command in your terminal:
 
 `git clone git@github.com:MikeChen012345/resume_builder.git`
