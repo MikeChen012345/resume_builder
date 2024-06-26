@@ -49,7 +49,7 @@ Then, run the following command in your terminal to open the GUI:
 
 You can find various buttons on the main window. This includes:
 
-* Generate resume: generate the resume from the information that you have filled in the CSV files. You need to first enter a desired output filename in the "Output Filename" textbox. The generated resume will be saved in the `\output` folder. There is also an option "Preserver LaTeX File" to preserve the transitional LaTeX file after the generation of the PDF. This is useful if you want to manually compile the PDF.
+* Generate resume: generate the resume from the information that you have filled in the CSV files. You need to first enter a desired output filename in the "Output Filename" textbox. The generated resume will be saved in the `\output` folder. The current progress of the resume builder will also be saved in the `\saved` folder. There is also an option "Preserver LaTeX File" to preserve the transitional LaTeX file after the generation of the PDF. This is useful if you want to manually compile the PDF.
 
 * Resume improver: improve the resume from the information that you have filled in the CSV files. The improved resume will be saved in the `\output` folder. The name will be "improved_resume_\<time generated>".
 
