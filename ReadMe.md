@@ -114,6 +114,10 @@ _Note: during the generation, the software may be stuck due to waiting for respo
 
 For MacOS, try changing `python` into `python3`, `pip` into `pip3` and leaving the other parts the same.
 
+## The resume builder fails to generate new resume. What should I do?
+
+First, make sure that you have filled in the CSV files correctly. If you have, then the problem may be due to the LaTeX engine. Make sure that you have installed LaTeX and all the required packages. If you have, then the problem may be due to the syntax error in the LaTeX file. You can try to manually fix the syntax error in the generated .tex file and recompile using the "Compile resume PDF" feature.
+
 ## The resume improver fails to create new resume. What should I do?
 
 The current resume improver can be unstable because sometimes GPT changes the format, causing the resume improver to fail to recognize the response. You can retry and it should be working within a few tries.
