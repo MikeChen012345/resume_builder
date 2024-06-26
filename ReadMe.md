@@ -21,9 +21,7 @@ Then, make sure that you have Python installed. If not, go to https://www.python
 
 `pip install -r requirements.txt`
 
-For Windows: The `xelatex.exe` is in the latex folder, so you don't need to install LaTeX separately. If you want to install LaTeX separately, you can get it at https://miktex.org/download. <u>Make sure that you get the version that corresponds to your system and follow the installation instructions</u>.
-
-For MacOS: Due to the limitation of the system, it is not possible to use LaTeX without full installation. If you have not, get LaTeX at https://miktex.org/download. <u>Make sure that you get the version that corresponds to your system and follow the installation instructions</u>.
+Due to the limitation of the system, it is not possible to use LaTeX without full installation. If you have not, get LaTeX at https://miktex.org/download. <u>Make sure that you get the version that corresponds to your system and follow the installation instructions</u>.
 
 Now we can move on to build the resume! 
 

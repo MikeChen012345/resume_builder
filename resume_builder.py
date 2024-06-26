@@ -150,7 +150,7 @@ class ResumeBuilder:
         try:
             # Compile the LaTeX file to generate the PDF
             print("Outputing resume pdf...")
-            os.system("latex\\xelatex temp_resume.tex -output-directory=output -interaction=nonstopmode")
+            os.system("xelatex temp_resume.tex -output-directory=output -interaction=nonstopmode")
 
             # Check if the PDF file was generated successfully and rename it
             if os.path.exists("output/temp_resume.pdf"):
