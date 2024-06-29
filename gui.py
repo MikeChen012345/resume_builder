@@ -2,6 +2,7 @@ import os
 import time
 import tkinter as tk
 from tkinter import messagebox, filedialog
+from tkPDFViewer2 import tkPDFViewer as pdf
 from resume_builder import ResumeBuilder
 from resume_improver import ResumeImprover
 from resume_rater import ResumeRater
@@ -13,6 +14,13 @@ class ResumeBuilderGUI:
         ## Header Section
         self.window = window
         self.window.title("Resume Builder")
+
+        ## ReadMe Section
+
+        self.readme = tk.Frame(window, width=100, bg='grey')
+        pdf_obj = pdf.ShowPdf()
+        pdf_view = pdf_obj.pdf_view(window, pdf_location="ReadMe.pdf", width=100, height=50)
+        pdf_view.pack(expand=True, fill='both', side='right')
 
         ## Sidebar Section
         self.sidebar = tk.Frame(window, width=200, bg='grey')

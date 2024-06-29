@@ -73,6 +73,10 @@ _Note: the "Generate LaTeX file" feature is very unstable and may not work prope
 
 _Note: during the generation, the software may be stuck due to waiting for responses from the url. Please wait patiently._
 
+## The ReadMe window
+
+You can find the ReadMe window at the right of the main window. This includes the ReadMe of the project. You can find the ReadMe of the project in the `\ReadMe.md` file.
+
 # Using the Commandline Interface
 
 _Note: We recommend you to use the GUI if you can as the commandline can be troublesome if you don't have enough experience. Also, several features are only available via the GUI._
